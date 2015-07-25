@@ -26,8 +26,8 @@ mengendifferenz [] _  = []
 
 -- Aufgabe 4
 
-echtTeiler:: Int -> [Int]
-echtTeiler n =[x | x <- [1..n],n`mod`x ==0, x /= n]
+echtTeiler :: Int -> [Int]
+echtTeiler n = [x | x <- [1 .. (n `div` 2)], n `mod` x == 0]
 
 -- Aufgabe 5
 
