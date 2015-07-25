@@ -124,3 +124,15 @@ paintPicture f size = paint size (map f [(x,y,size) | x <- [1..size], y <- [1..s
                         paint 0  []     = []
                         paint 0 (c:cs)  = '\n' : (paint size (c:cs))
                         paint n (c:cs)  = c: (paint (n-1) cs)
+
+swissFlag :: (Int, Int, Int) -> Char
+swissFlag (x , y, size)
+	| x `zwischen` (einFünftel, size - einFünftel) && y `zwischen` (zweiFünftel, size - zweiFünftel) = ' '
+	| y `zwischen` (einFünftel, size - einFünftel) && x `zwischen` (zweiFünftel, size - zweiFünftel) = ' '
+	| otherwise = '.'
+	where
+		einFünftel  = size `div` 5
+		zweiFünftel = 2 * einFünftel
+		zwischen n (x, y) = x < n && y > n
+
+testSwissFlag  = putStrLn (paintPicture swissFlag 60)
