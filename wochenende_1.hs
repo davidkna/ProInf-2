@@ -22,7 +22,17 @@ mengendifferenz (x:xs) (y:ys) = case x `compare` y of
     GT -> x : mengendifferenz xs ys
 mengendifferenz x  [] = x
 mengendifferenz [] _  = []
+
 -- Aufgabe 3
+piRekursiv :: Integer -> Double
+piRekursiv n = 4 * piRekursiv' n
+	where
+		piRekursiv' :: Integer -> Double
+		piRekursiv' 0 = 0.0
+		piRekursiv' k = ((-1) ** (fromIntegral (k))) / (2.0 * fromIntegral k + 1) + piRekursiv (k - 1)
+
+piListe :: Integer -> Double
+piListe n = 4 * sum [((-1) ** fromIntegral k) / (2 * fromIntegral k + 1) | k <- [0 .. n]]
 
 -- Aufgabe 4
 
