@@ -44,8 +44,13 @@ echtTeiler n = [x | x <- [1 .. (n `div` 2)], n `mod` x == 0]
 -- Aufgabe 6
 -- 6a)
 nextCollatz :: Integer -> Integer
-nextCollatz n | n `mod` 2 == 0 = n `div 2
+nextCollatz n | n `mod` 2 == 0 = n `div` 2
 			  | otherwise      = n * 3 + 1
+
+-- 6b)
+collatzSeq :: Integer -> [Integer]
+collatzSeq 1 = []
+collatzSeq x = x : collatzSeq (nextCollatz  x)
 
 -- Aufgabe 7
 {-Hilfe für 7.
