@@ -16,7 +16,7 @@ quadSolutions' a b c = pq (b / a) (c / a)
 
 pq :: Double -> Double -> [Double]
 pq p q = case compare wurzelInnen 0 of
-	-- wurzelInnen < 0
+    -- wurzelInnen < 0
     LT -> []
     -- wurzelInnen == 0
     EQ ->  [(-pHalbe) + p * sqrt wurzelInnen]
@@ -30,17 +30,17 @@ pq p q = case compare wurzelInnen 0 of
 -- Rückgabe wie in den Beispielen
 quadSolutionsInt :: Int -> Int -> Int -> [Int]
 quadSolutionsInt a b c = solutionsInt(quadSolutions' a' b' c')
-	where
-		-- Konvertiert Argumente zu Double
-		a' = fromIntegral a
-		b' = fromIntegral b
-		c' = fromIntegral c
-		-- Übernehme einzelne Elemente der Liste, wenn sie ganzzahlig sind
-		solutionsInt :: [Double] -> [Int]
-		solutionsInt [] = []
-		solutionsInt (x:xs)
-			| x - fromIntegral (floor x) == 0 = floor x : solutionsInt xs
-			| otherwise                       = solutionsInt xs
+    where
+        -- Konvertiert Argumente zu Double
+        a' = fromIntegral a
+        b' = fromIntegral b
+        c' = fromIntegral c
+        -- Übernehme einzelne Elemente der Liste, wenn sie ganzzahlig sind
+        solutionsInt :: [Double] -> [Int]
+        solutionsInt [] = []
+        solutionsInt (x:xs)
+            | x - fromIntegral (floor x) == 0 = floor x : solutionsInt xs
+            | otherwise                       = solutionsInt xs
 
                     
 -- Aufgabe 2
@@ -125,14 +125,34 @@ paintPicture f size = paint size (map f [(x,y,size) | x <- [1..size], y <- [1..s
                         paint 0 (c:cs)  = '\n' : (paint size (c:cs))
                         paint n (c:cs)  = c: (paint (n-1) cs)
 
+-- Prüft ob n zwischen x und y ist
+zwischen :: Int -> (Int, Int) -> Bool
+zwischen n (x, y) = x < n && y > n
+
+-- Gibt ganzzahlige Entfernung zwischen zwei Punkten zurück
+entfernung :: (Int, Int) -> (Int, Int) -> Int
+entfernung (x1, y1) (x2, y2) = round (sqrt ((x1 - x2) ^ 2 + (y1 - y2) ^ 2))
+
 swissFlag :: (Int, Int, Int) -> Char
 swissFlag (x , y, size)
-	| x `zwischen` (einFünftel, size - einFünftel) && y `zwischen` (zweiFünftel, size - zweiFünftel) = ' '
-	| y `zwischen` (einFünftel, size - einFünftel) && x `zwischen` (zweiFünftel, size - zweiFünftel) = ' '
-	| otherwise = '.'
-	where
-		einFünftel  = size `div` 5
-		zweiFünftel = 2 * einFünftel
-		zwischen n (x, y) = x < n && y > n
+    | x `zwischen` (einFünftel, size - einFünftel) && y `zwischen` (zweiFünftel, size - zweiFünftel) = ' '
+    | y `zwischen` (einFünftel, size - einFünftel) && x `zwischen` (zweiFünftel, size - zweiFünftel) = ' '
+    | otherwise = '.'
+    where
+        einFünftel  = size `div` 5
+        zweiFünftel = 2 * einFünftel
+        
 
+
+
+circle :: (Int, Int, Int) -> Char
+circle(x , y, size)
+    | inCircle  = if y < mitte then ' ' else '-'
+    | otherwise = if x > mitte then '.' else ':'
+    where
+        inCircle = entfernung (mitte, mitte) (x, y) <= 3 * size `div` 5
+        mitte = size `div` 2
+
+-- Zum Testen
 testSwissFlag  = putStrLn (paintPicture swissFlag 60)
+testCircle  = putStrLn (paintPicture circle 60)
