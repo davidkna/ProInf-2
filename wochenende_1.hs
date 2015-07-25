@@ -131,7 +131,10 @@ zwischen n (x, y) = x < n && y > n
 
 -- Gibt ganzzahlige Entfernung zwischen zwei Punkten zurück
 entfernung :: (Int, Int) -> (Int, Int) -> Int
-entfernung (x1, y1) (x2, y2) = round (sqrt ((x1 - x2) ^ 2 + (y1 - y2) ^ 2))
+entfernung (x1, y1) (x2, y2) = round (sqrt (fromIntegral (x' * x' + y' * y')))
+	where
+		x' = (x1 - x2)
+		y' = (y1 - y2)
 
 swissFlag :: (Int, Int, Int) -> Char
 swissFlag (x , y, size)
@@ -147,10 +150,10 @@ swissFlag (x , y, size)
 
 circle :: (Int, Int, Int) -> Char
 circle(x , y, size)
-    | inCircle  = if y < mitte then ' ' else '-'
-    | otherwise = if x > mitte then '.' else ':'
+    | inCircle  = if x < mitte then ' ' else '-'
+    | otherwise = if y > mitte then ':' else '.'
     where
-        inCircle = entfernung (mitte, mitte) (x, y) <= 3 * size `div` 5
+        inCircle = entfernung (mitte, mitte) (x, y) <= 2 * size `div` 5
         mitte = size `div` 2
 
 -- Zum Testen
