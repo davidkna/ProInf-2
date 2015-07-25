@@ -1,0 +1,11 @@
+-- ProInformatik II: Funktionale Programmierung
+-- 1. Übungsblatt für Wochenende
+-- David Knaack und Evan Seilz
+
+-- Aufgabe 1
+-- Aufgabe 2
+-- Aufgabe 3
+-- Aufgabe 4
+-- Aufgabe 5
+-- Aufgabe 6
+-- Aufgabe 7
