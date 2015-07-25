@@ -19,6 +19,16 @@ quadSolutions a b c = [ x | x <- [(-10000),(-9999) .. 10000], (a*x^2 + b*x + c) 
 -- Typendeklaration
 type Set = [Int]
 
+-- Mengendifferenz von a und b
+-- Gibt alle Elemente zurück die in x aber nicht in y sind
+mengendifferenz :: Set -> Set -> Set
+mengendifferenz [] [] = []
+mengendifferenz (x:xs) (y:ys) = case x `compare y of
+    EQ -> mengendifferenz xs ys
+    LT -> mengendifferenz (x:xs) ys
+    GT -> x : mengendifferenz xs ys
+mengendifferenz x  [] = x
+mengendifferenz [] _  = []
 -- Aufgabe 3
 
 -- Aufgabe 4
@@ -51,9 +61,9 @@ foo x y s = toEnum(48+(x+y)`mod`2))
 
 foo::Int->Int->Int->Char
 foo x y s = toEnum(48+((x`div`w+y`div`w)`mod`2)
-	where w = s`div`8
+    where w = s`div`8
 
-	-}
+    -}
 -- Vorgegebene Funktion
 paintPicture :: ((Int, Int, Int) -> Char) -> Int -> [Char]
 paintPicture f size = paint size (map f [(x,y,size) | x <- [1..size], y <- [1..size]])
