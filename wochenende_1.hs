@@ -82,9 +82,9 @@ maxNeighborsDistance :: [Int] -> Int
 maxNeighborsDistance[] = 0
 maxNeighborsDistance [_] = 0
 maxNeighborsDistance (a:b:xs)
-	| abs (a - b) >  maxRest = abs (a - b)
-	| otherwise              = maxRest
-	where maxRest = maxNeighborsDistance xs
+    | abs (a - b) >  maxRest = abs (a - b)
+    | otherwise              = maxRest
+    where maxRest = maxNeighborsDistance xs
 
 
 
@@ -141,9 +141,9 @@ zwischen n (x, y) = x < n && y > n
 -- Gibt ganzzahlige Entfernung zwischen zwei Punkten zurück
 entfernung :: (Int, Int) -> (Int, Int) -> Int
 entfernung (x1, y1) (x2, y2) = round (sqrt (fromIntegral (x' * x' + y' * y')))
-	where
-		x' = (x1 - x2)
-		y' = (y1 - y2)
+    where
+        x' = (x1 - x2)
+        y' = (y1 - y2)
 
 swissFlag :: (Int, Int, Int) -> Char
 swissFlag (x , y, size)
@@ -164,9 +164,9 @@ circle(x , y, size)
 
 gitter :: (Int, Int, Int) -> Char
 gitter(x, y, size)
-	| y `mod` 5 == 0 = '|'
-	| x `mod` 5 == 0 = '-'
-	| otherwise      = ' '
+    | y `mod` 5 == 0 = '|'
+    | x `mod` 5 == 0 = '-'
+    | otherwise      = ' '
 
 -- Zum Testen
 testSwissFlag  = putStrLn (paintPicture swissFlag 60)
