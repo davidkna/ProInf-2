@@ -9,6 +9,8 @@ quadSolutions a b c = [x | x <- [minBound :: Int .. maxBound :: Int], (a * x^2 +
 -- Ansatz 2 mit pq Formel
 
 -- Aufgabe 2
+-- Typendeklaration
+type Set = [Int]
 
 -- Aufgabe 3
 
