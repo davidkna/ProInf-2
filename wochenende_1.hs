@@ -16,7 +16,7 @@ type Set = [Int]
 -- Gibt alle Elemente zurück die in x aber nicht in y sind
 mengendifferenz :: Set -> Set -> Set
 mengendifferenz [] [] = []
-mengendifferenz (x:xs) (y:ys) = case x `compare y of
+mengendifferenz (x:xs) (y:ys) = case x `compare` y of
     EQ -> mengendifferenz xs ys
     LT -> mengendifferenz (x:xs) ys
     GT -> x : mengendifferenz xs ys
