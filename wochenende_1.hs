@@ -5,7 +5,7 @@
 -- Aufgabe 1
 -- Ansatz 1 mit Listengeneratoren (sehr langsam)
 quadSolutions :: Int -> Int -> Int -> [Int]
-quadSolutions a b c = [x | x <- [minBound :: Int .. maxBound :: Int], a * x^2 + b * x + c == 0]
+quadSolutions a b c = [x | x <- [minBound :: Int .. maxBound :: Int], (a * x^2 + b * x + c) == 0]
 -- Ansatz 2 mit pq Formel
 
 -- Aufgabe 2
