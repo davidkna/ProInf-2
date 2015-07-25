@@ -8,9 +8,6 @@ quadSolutions :: Int -> Int -> Int -> [Int]
 quadSolutions a b c = [x | x <- [minBound :: Int .. maxBound :: Int], a * x^2 + b * x + c == 0]
 -- Ansatz 2 mit pq Formel
 
-quadSolutions :: Int -> Int -> Int -> [Int]
-quadSolutions a b c = [ x | x <- [(-10000),(-9999) .. 10000], (a*x^2 + b*x + c) == 0]
-
 -- Aufgabe 2
 
 -- Aufgabe 3
