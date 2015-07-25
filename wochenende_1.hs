@@ -18,7 +18,7 @@ mengendifferenz :: Set -> Set -> Set
 mengendifferenz [] [] = []
 mengendifferenz (x:xs) (y:ys) = case x `compare` y of
     EQ -> mengendifferenz xs ys
-    LT -> mengendifferenz (x:xs) ys
+    LT -> x: mengendifferenz xs (y:ys)
     GT -> x : mengendifferenz xs ys
 mengendifferenz x  [] = x
 mengendifferenz [] _  = []
