@@ -6,8 +6,43 @@
 -- Ansatz 1 mit Listengeneratoren (sehr langsam)
 quadSolutions :: Int -> Int -> Int -> [Int]
 quadSolutions a b c = [x | x <- [minBound :: Int .. maxBound :: Int], (a * x^2 + b * x + c) == 0]
--- Ansatz 2 mit pq Formel
 
+-- Ansatz 2 mit pq Formel
+quadSolutions' :: Double -> Double -> Double -> [Double]
+-- Wandelt um in Form x^2 + p*x + q = 0
+quadSolutions' 0 b c = [(-c)/b]
+quadSolutions' a b 0 = [0]
+quadSolutions' a b c = pq (b / a) (c / a)
+
+pq :: Double -> Double -> [Double]
+pq p q = case compare wurzelInnen 0 of
+	-- wurzelInnen < 0
+    LT -> []
+    -- wurzelInnen == 0
+    EQ ->  [(-pHalbe) + p * sqrt wurzelInnen]
+    -- wurzelInnen > 0
+    GT -> let pWurzel = p * sqrt wurzelInnen in [(-pHalbe) + pWurzel, (-pHalbe) - pWurzel]
+    where
+        pHalbe      = p / 2 
+        wurzelInnen = pHalbe ^ 2 - q
+
+-- Ansatz 3 mit Rückgabe vom Typ Int statt Double
+-- Rückgabe wie in den Beispielen
+quadSolutionsInt :: Int -> Int -> Int -> [Int]
+quadSolutionsInt a b c = solutionsInt(quadSolutions' a' b' c')
+	where
+		-- Konvertiert Argumente zu Double
+		a' = fromIntegral a
+		b' = fromIntegral b
+		c' = fromIntegral c
+		-- Übernehme einzelne Elemente der Liste, wenn sie ganzzahlig sind
+		solutionsInt :: [Double] -> [Int]
+		solutionsInt [] = []
+		solutionsInt (x:xs)
+			| x - fromIntegral (floor x) == 0 = floor x : solutionsInt xs
+			| otherwise                       = solutionsInt xs
+
+                    
 -- Aufgabe 2
 -- Typendeklaration
 type Set = [Int]
@@ -17,8 +52,11 @@ type Set = [Int]
 mengendifferenz :: Set -> Set -> Set
 mengendifferenz [] [] = []
 mengendifferenz (x:xs) (y:ys) = case x `compare` y of
+    -- x == y
     EQ -> mengendifferenz xs ys
+    -- x < y
     LT -> x : mengendifferenz xs (y:ys)
+    -- y > x
     GT -> x : mengendifferenz xs ys
 mengendifferenz x  [] = x
 mengendifferenz [] _  = []
