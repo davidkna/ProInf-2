@@ -43,6 +43,9 @@ echtTeiler n = [x | x <- [1 .. (n `div` 2)], n `mod` x == 0]
 
 -- Aufgabe 6
 
+nextCollatz :: Factorial a => a -> a
+nextCollatz n | n `mod` 2 == 0 = n / 2
+			  | otherwise      = n * 3 + 1 
 -- Aufgabe 7
 {-Hilfe für 7.
 
