@@ -67,10 +67,10 @@ piRekursiv n = 4 * piRekursiv' n
     where
         piRekursiv' :: Integer -> Double
         piRekursiv' 0 = 1
-        piRekursiv' k = ((-1) ** fromIntegral k) / (2 * fromIntegral k + 1) + piRekursiv (k - 1)
+        piRekursiv' k = fromIntegral ((-1) ^ k) / fromIntegral (2 * k + 1) + piRekursiv (k - 1) 
 
 piListe :: Integer -> Double
-piListe n = 4 * sum [((-1) ** fromIntegral k) / (2 * fromIntegral k + 1) | k <- [0 .. n]]
+piListe n = 4 * sum [let k' = fromIntegral k in ((-1) ** k') / (2 * k' + 1) | k <- [0 .. n]]
 
 -- Aufgabe 4
 
