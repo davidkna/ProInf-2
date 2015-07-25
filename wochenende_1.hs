@@ -153,9 +153,6 @@ swissFlag (x , y, size)
     where
         einFünftel  = size `div` 5
         zweiFünftel = 2 * einFünftel
-        
-
-
 
 circle :: (Int, Int, Int) -> Char
 circle(x , y, size)
@@ -165,6 +162,13 @@ circle(x , y, size)
         inCircle = entfernung (mitte, mitte) (x, y) <= 2 * size `div` 5
         mitte = size `div` 2
 
+gitter :: (Int, Int, Int) -> Char
+gitter(x, y, size)
+	| y `mod` 5 == 0 = '|'
+	| x `mod` 5 == 0 = '-'
+	| otherwise      = ' '
+
 -- Zum Testen
 testSwissFlag  = putStrLn (paintPicture swissFlag 60)
-testCircle  = putStrLn (paintPicture circle 60)
+testCircle     = putStrLn (paintPicture circle 60)
+testGitter     = putStrLn (paintPicture gitter 60)
