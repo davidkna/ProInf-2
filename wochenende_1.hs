@@ -26,10 +26,10 @@ mengendifferenz [] _  = []
 -- Aufgabe 3
 piRekursiv :: Integer -> Double
 piRekursiv n = 4 * piRekursiv' n
-	where
-		piRekursiv' :: Integer -> Double
-		piRekursiv' 0 = 0.0
-		piRekursiv' k = ((-1) ** (fromIntegral (k))) / (2.0 * fromIntegral k + 1) + piRekursiv (k - 1)
+    where
+        piRekursiv' :: Integer -> Double
+        piRekursiv' 0 = 0.0
+        piRekursiv' k = ((-1) ** (fromIntegral (k))) / (2.0 * fromIntegral k + 1) + piRekursiv (k - 1)
 
 piListe :: Integer -> Double
 piListe n = 4 * sum [((-1) ** fromIntegral k) / (2 * fromIntegral k + 1) | k <- [0 .. n]]
@@ -45,13 +45,16 @@ echtTeiler n = [x | x <- [1 .. (n `div` 2)], n `mod` x == 0]
 -- 6a)
 nextCollatz :: Integer -> Integer
 nextCollatz n | n `mod` 2 == 0 = n `div` 2
-			  | otherwise      = n * 3 + 1
+              | otherwise      = n * 3 + 1
 
 -- 6b)
 collatzSeq :: Integer -> [Integer]
-collatzSeq 1 = []
+collatzSeq 1 = [1]
 collatzSeq x = x : collatzSeq (nextCollatz  x)
 
+-- 6c)
+collatzSeqs :: Integer -> [[Integer]]
+collatzSeqs n = [collatzSeq x | x <- [1 .. n]]
 -- Aufgabe 7
 {-Hilfe für 7.
 
