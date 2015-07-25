@@ -79,7 +79,7 @@ echtTeiler n = [x | x <- [1 .. (n `div` 2)], n `mod` x == 0]
 
 -- Aufgabe 5
 maxNeighborsDistance :: [Int] -> Int
-maxNeighborsDistance[] = 0
+maxNeighborsDistance [] = 0
 maxNeighborsDistance [_] = 0
 maxNeighborsDistance (a:b:xs)
     | abs (a - b) >  maxRest = abs (a - b)
