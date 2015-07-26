@@ -10,7 +10,7 @@ quadSolutions a b c = [x | x <- [minBound :: Int .. maxBound :: Int], (a * x^2 +
 -- Ansatz 2 mit pq Formel
 quadSolutions' :: Double -> Double -> Double -> [Double]
 -- Wandelt um in Form x^2 + p*x + q = 0
-quadSolutions' 0 b c = [(-c)/b]
+quadSolutions' 0 b c = [(-c) / b]
 quadSolutions' a b 0 = [0]
 quadSolutions' a b c = pq (b / a) (c / a)
 
@@ -35,7 +35,7 @@ quadSolutionsInt a b c = solutionsInt(quadSolutions' a' b' c')
         a' = fromIntegral a
         b' = fromIntegral b
         c' = fromIntegral c
-        -- Übernehme einzelne Elemente der Liste, wenn sie ganzzahlig sind
+        -- Übernimmt einzelne Elemente der Liste nur, wenn sie ganzzahlig sind
         solutionsInt :: [Double] -> [Int]
         solutionsInt [] = []
         solutionsInt (x:xs)
@@ -73,7 +73,6 @@ piListe :: Integer -> Double
 piListe n = 4 * sum [let k' = fromIntegral k in ((-1) ** k') / (2 * k' + 1) | k <- [0 .. n]]
 
 -- Aufgabe 4
-
 echtTeiler :: Int -> [Int]
 echtTeiler n = [x | x <- [1 .. (n `div` 2)], n `mod` x == 0]
 
@@ -102,30 +101,8 @@ collatzSeq x = x : collatzSeq (nextCollatz  x)
 -- 6c)
 collatzSeqs :: Integer -> [[Integer]]
 collatzSeqs n = [collatzSeq x | x <- [1 .. n]]
+
 -- Aufgabe 7
-{-Hilfe für 7.
-
-01010
-10101
-01010
-10101
-01010
-
-foo::Int->Int->Int->Char
-foo x y s = toEnum(48+(x+y)`mod`2))
-
-001100
-001100
-110011
-110011
-001100
-
-
-foo::Int->Int->Int->Char
-foo x y s = toEnum(48+((x`div`w+y`div`w)`mod`2)
-    where w = s`div`8
-
-    -}
 -- Vorgegebene Funktion
 paintPicture :: ((Int, Int, Int) -> Char) -> Int -> [Char]
 paintPicture f size = paint size (map f [(x,y,size) | x <- [1..size], y <- [1..size]])
@@ -168,7 +145,21 @@ gitter(x, y, size)
     | x `mod` 5 == 0 = '-'
     | otherwise      = ' '
 
+-- Eigenes Bild
+-- Schachbrett, dass innerhalb eines Kreises in der Mitte von den Zeichen invertiert ist
+chessCircle :: (Int, Int, Int) -> Char
+chessCircle (x, y, size )
+    -- /= wird als explizites oder verwendet
+    -- (x `div` tileSize + y `div` tileSize) `mod` 2 == 0) gibt zurück ob das Schachfeld Schwarz ist
+    | ((x `div` tileSize + y `div` tileSize) `mod` 2 == 0) /= inCircle = '#'
+    | otherwise = ' '
+    where 
+        tileSize = size `div`8
+        inCircle = entfernung (mitte, mitte) (x, y) <= 2 * size `div` 5
+        mitte = size `div` 2
+
 -- Zum Testen
 testSwissFlag  = putStrLn (paintPicture swissFlag 60)
 testCircle     = putStrLn (paintPicture circle 60)
 testGitter     = putStrLn (paintPicture gitter 60)
+testChess      = putStrLn (paintPicture chessCircle 60)
