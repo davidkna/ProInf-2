@@ -1,0 +1,166 @@
+{\rtf1\ansi\uc0\deff0{\fonttbl{\f0\fmodern\fprq1\fcharset0 Consolas;}}{\colortbl;\red136\green136\blue136;\red186\green33\blue33;\red0\green68\blue221;\red102\green102\blue102;\red64\green128\blue128;\red160\green160\blue0;\red25\green23\blue124;\red0\green128\blue0;\red187\green102\blue136;\red187\green102\blue34;\red136\green0\blue0;\red170\green34\blue255;\red153\green153\blue153;\red0\green160\blue0;\red160\green0\blue0;\red255\green0\blue0;\red128\green0\blue128;\red176\green0\blue64;\red0\green0\blue255;\red187\green187\blue187;\red188\green122\blue0;\red0\green0\blue128;\red125\green144\blue41;\red210\green65\blue58;}\f0 {\cf5\i -- ProInformatik II: Funktionale Programmierung}\par
+{\cf5\i -- 1. {\u220}bungsblatt f{\u252}r Wochenende}\par
+{\cf5\i -- David Knaack und Evan Seilz}\par
+\par
+{\cf5\i -- Aufgabe 1}\par
+{\cf5\i -- Ansatz 1 mit Listengeneratoren (sehr langsam)}\par
+{\cf19 quadSolutions} {\cf12\b ::} {\cf18 Int} {\cf12\b ->} {\cf18 Int} {\cf12\b ->} {\cf18 Int} {\cf12\b ->} [{\cf18 Int}]\par
+{\cf19 quadSolutions} a b c {\cf12\b =} [x {\cf4 |} x {\cf12\b <-} [minBound {\cf12\b ::} {\cf18 Int} {\cf4 ..} maxBound {\cf12\b ::} {\cf18 Int}], (a {\cf4 *} x{\cf4 ^}{\cf4 2} {\cf4 +} b {\cf4 *} x {\cf4 +} c) {\cf4 ==} {\cf4 0}]\par
+\par
+{\cf5\i -- Ansatz 2 mit pq Formel}\par
+{\cf19 quadSolutions'} {\cf12\b ::} {\cf18 Double} {\cf12\b ->} {\cf18 Double} {\cf12\b ->} {\cf18 Double} {\cf12\b ->} [{\cf18 Double}]\par
+{\cf5\i -- Wandelt um in Form x^2 + p*x + q = 0}\par
+{\cf19 quadSolutions'} {\cf4 0} b c {\cf12\b =} [({\cf4 -}c) {\cf4 /} b]\par
+{\cf19 quadSolutions'} a b {\cf4 0} {\cf12\b =} [{\cf4 0}]\par
+{\cf19 quadSolutions'} a b c {\cf12\b =} pq (b {\cf4 /} a) (c {\cf4 /} a)\par
+\par
+{\cf19 pq} {\cf12\b ::} {\cf18 Double} {\cf12\b ->} {\cf18 Double} {\cf12\b ->} [{\cf18 Double}]\par
+{\cf19 pq} p q {\cf12\b =} {\cf8\b case} compare wurzelInnen {\cf4 0} {\cf8\b of}\par
+    {\cf5\i -- wurzelInnen < 0}\par
+    {\cf18 LT} {\cf12\b ->} {\cf18 []}\par
+    {\cf5\i -- wurzelInnen == 0}\par
+    {\cf18 EQ} {\cf12\b ->}  [({\cf4 -}pHalbe) {\cf4 +} p {\cf4 *} sqrt wurzelInnen]\par
+    {\cf5\i -- wurzelInnen > 0}\par
+    {\cf18 GT} {\cf12\b ->} {\cf8\b let} pWurzel {\cf12\b =} p {\cf4 *} sqrt wurzelInnen {\cf8\b in} [({\cf4 -}pHalbe) {\cf4 +} pWurzel, ({\cf4 -}pHalbe) {\cf4 -} pWurzel]\par
+    {\cf8\b where}\par
+        pHalbe      {\cf12\b =} p {\cf4 /} {\cf4 2} \par
+        wurzelInnen {\cf12\b =} pHalbe {\cf4 ^} {\cf4 2} {\cf4 -} q\par
+\par
+{\cf5\i -- Ansatz 3 mit R{\u252}ckgabe vom Typ Int statt Double}\par
+{\cf5\i -- R{\u252}ckgabe wie in den Beispielen}\par
+{\cf19 quadSolutionsInt} {\cf12\b ::} {\cf18 Int} {\cf12\b ->} {\cf18 Int} {\cf12\b ->} {\cf18 Int} {\cf12\b ->} [{\cf18 Int}]\par
+{\cf19 quadSolutionsInt} a b c {\cf12\b =} solutionsInt(quadSolutions' a' b' c')\par
+    {\cf8\b where}\par
+        {\cf5\i -- Konvertiert Argumente zu Double}\par
+        a' {\cf12\b =} fromIntegral a\par
+        b' {\cf12\b =} fromIntegral b\par
+        c' {\cf12\b =} fromIntegral c\par
+        {\cf5\i -- {\u220}bernimmt einzelne Elemente der Liste nur, wenn sie ganzzahlig sind}\par
+        solutionsInt {\cf12\b ::} [{\cf18 Double}] {\cf12\b ->} [{\cf18 Int}]\par
+        solutionsInt {\cf18 []} {\cf12\b =} {\cf18 []}\par
+        solutionsInt (x{\cf18 :}xs)\par
+            {\cf4 |} x {\cf4 -} fromIntegral (floor x) {\cf4 ==} {\cf4 0} {\cf12\b =} floor x {\cf18 :} solutionsInt xs\par
+            {\cf4 |} otherwise                       {\cf12\b =} solutionsInt xs\par
+\par
+                    \par
+{\cf5\i -- Aufgabe 2}\par
+{\cf5\i -- Typendeklaration}\par
+{\cf8\b type} {\cf18 Set} {\cf12\b =} [{\cf18 Int}]\par
+\par
+{\cf5\i -- Mengendifferenz von a und b}\par
+{\cf5\i -- Gibt alle Elemente zur{\u252}ck die in x aber nicht in y sind}\par
+{\cf19 mengendifferenz} {\cf12\b ::} {\cf18 Set} {\cf12\b ->} {\cf18 Set} {\cf12\b ->} {\cf18 Set}\par
+{\cf19 mengendifferenz} {\cf18 []} {\cf18 []} {\cf12\b =} {\cf18 []}\par
+{\cf19 mengendifferenz} (x{\cf18 :}xs) (y{\cf18 :}ys) {\cf12\b =} {\cf8\b case} x `compare` y {\cf8\b of}\par
+    {\cf5\i -- x == y}\par
+    {\cf18 EQ} {\cf12\b ->} mengendifferenz xs ys\par
+    {\cf5\i -- x < y}\par
+    {\cf18 LT} {\cf12\b ->} x {\cf18 :} mengendifferenz xs (y{\cf18 :}ys)\par
+    {\cf5\i -- y > x}\par
+    {\cf18 GT} {\cf12\b ->} x {\cf18 :} mengendifferenz xs ys\par
+{\cf19 mengendifferenz} x  {\cf18 []} {\cf12\b =} x\par
+{\cf19 mengendifferenz} {\cf18 []} {\cf8\b _}  {\cf12\b =} {\cf18 []}\par
+\par
+{\cf5\i -- Aufgabe 3}\par
+{\cf19 piRekursiv} {\cf12\b ::} {\cf18 Integer} {\cf12\b ->} {\cf18 Double}\par
+{\cf19 piRekursiv} n {\cf12\b =} {\cf4 4} {\cf4 *} piRekursiv' n\par
+    {\cf8\b where}\par
+        piRekursiv' {\cf12\b ::} {\cf18 Integer} {\cf12\b ->} {\cf18 Double}\par
+        piRekursiv' {\cf4 0} {\cf12\b =} {\cf4 1}\par
+        piRekursiv' k {\cf12\b =} fromIntegral (({\cf4 -}{\cf4 1}) {\cf4 ^} k) {\cf4 /} fromIntegral ({\cf4 2} {\cf4 *} k {\cf4 +} {\cf4 1}) {\cf4 +} piRekursiv (k {\cf4 -} {\cf4 1}) \par
+\par
+{\cf19 piListe} {\cf12\b ::} {\cf18 Integer} {\cf12\b ->} {\cf18 Double}\par
+{\cf19 piListe} n {\cf12\b =} {\cf4 4} {\cf4 *} sum [{\cf8\b let} k' {\cf12\b =} fromIntegral k {\cf8\b in} (({\cf4 -}{\cf4 1}) {\cf4 **} k') {\cf4 /} ({\cf4 2} {\cf4 *} k' {\cf4 +} {\cf4 1}) {\cf4 |} k {\cf12\b <-} [{\cf4 0} {\cf4 ..} n]]\par
+\par
+{\cf5\i -- Aufgabe 4}\par
+{\cf19 echtTeiler} {\cf12\b ::} {\cf18 Int} {\cf12\b ->} [{\cf18 Int}]\par
+{\cf19 echtTeiler} n {\cf12\b =} [x {\cf4 |} x {\cf12\b <-} [{\cf4 1} {\cf4 ..} (n `div` {\cf4 2})], n `mod` x {\cf4 ==} {\cf4 0}]\par
+\par
+{\cf5\i -- Aufgabe 5}\par
+{\cf19 maxNeighborsDistance} {\cf12\b ::} [{\cf18 Int}] {\cf12\b ->} {\cf18 Int}\par
+{\cf19 maxNeighborsDistance} {\cf18 []} {\cf12\b =} {\cf4 0}\par
+{\cf19 maxNeighborsDistance} [{\cf8\b _}] {\cf12\b =} {\cf4 0}\par
+{\cf19 maxNeighborsDistance} (a{\cf18 :}b{\cf18 :}xs)\par
+    {\cf4 |} abs (a {\cf4 -} b) {\cf4 >}  maxRest {\cf12\b =} abs (a {\cf4 -} b)\par
+    {\cf4 |} otherwise              {\cf12\b =} maxRest\par
+    {\cf8\b where} maxRest {\cf12\b =} maxNeighborsDistance xs\par
+\par
+\par
+\par
+{\cf5\i -- Aufgabe 6}\par
+{\cf5\i -- 6a)}\par
+{\cf19 nextCollatz} {\cf12\b ::} {\cf18 Integer} {\cf12\b ->} {\cf18 Integer}\par
+{\cf19 nextCollatz} n {\cf4 |} n `mod` {\cf4 2} {\cf4 ==} {\cf4 0} {\cf12\b =} n `div` {\cf4 2}\par
+              {\cf4 |} otherwise      {\cf12\b =} n {\cf4 *} {\cf4 3} {\cf4 +} {\cf4 1}\par
+\par
+{\cf5\i -- 6b)}\par
+{\cf19 collatzSeq} {\cf12\b ::} {\cf18 Integer} {\cf12\b ->} [{\cf18 Integer}]\par
+{\cf19 collatzSeq} {\cf4 1} {\cf12\b =} [{\cf4 1}]\par
+{\cf19 collatzSeq} x {\cf12\b =} x {\cf18 :} collatzSeq (nextCollatz  x)\par
+\par
+{\cf5\i -- 6c)}\par
+{\cf19 collatzSeqs} {\cf12\b ::} {\cf18 Integer} {\cf12\b ->} [[{\cf18 Integer}]]\par
+{\cf19 collatzSeqs} n {\cf12\b =} [collatzSeq x {\cf4 |} x {\cf12\b <-} [{\cf4 1} {\cf4 ..} n]]\par
+\par
+{\cf5\i -- Aufgabe 7}\par
+{\cf5\i -- Vorgegebene Funktion}\par
+{\cf19 paintPicture} {\cf12\b ::} (({\cf18 Int}, {\cf18 Int}, {\cf18 Int}) {\cf12\b ->} {\cf18 Char}) {\cf12\b ->} {\cf18 Int} {\cf12\b ->} [{\cf18 Char}]\par
+{\cf19 paintPicture} f size {\cf12\b =} paint size (map f [(x,y,size) {\cf4 |} x {\cf12\b <-} [{\cf4 1}{\cf4 ..}size], y {\cf12\b <-} [{\cf4 1}{\cf4 ..}size]])\par
+                      {\cf8\b where}\par
+                        paint {\cf4 0}  {\cf18 []}     {\cf12\b =} {\cf18 []}\par
+                        paint {\cf4 0} (c{\cf18 :}cs)  {\cf12\b =} {\cf2 '}{\cf10\b \\}{\cf10\b n}{\cf2 '} {\cf18 :} (paint size (c{\cf18 :}cs))\par
+                        paint n (c{\cf18 :}cs)  {\cf12\b =} c{\cf18 :} (paint (n{\cf4 -}{\cf4 1}) cs)\par
+\par
+{\cf5\i -- Pr{\u252}ft ob n zwischen x und y ist}\par
+{\cf19 zwischen} {\cf12\b ::} {\cf18 Int} {\cf12\b ->} ({\cf18 Int}, {\cf18 Int}) {\cf12\b ->} {\cf18 Bool}\par
+{\cf19 zwischen} n (x, y) {\cf12\b =} x {\cf4 <} n {\cf4 &&} y {\cf4 >} n\par
+\par
+{\cf5\i -- Gibt ganzzahlige Entfernung zwischen zwei Punkten zur{\u252}ck}\par
+{\cf19 entfernung} {\cf12\b ::} ({\cf18 Int}, {\cf18 Int}) {\cf12\b ->} ({\cf18 Int}, {\cf18 Int}) {\cf12\b ->} {\cf18 Int}\par
+{\cf19 entfernung} (x1, y1) (x2, y2) {\cf12\b =} round (sqrt (fromIntegral (x' {\cf4 *} x' {\cf4 +} y' {\cf4 *} y')))\par
+    {\cf8\b where}\par
+        x' {\cf12\b =} (x1 {\cf4 -} x2)\par
+        y' {\cf12\b =} (y1 {\cf4 -} y2)\par
+\par
+{\cf19 swissFlag} {\cf12\b ::} ({\cf18 Int}, {\cf18 Int}, {\cf18 Int}) {\cf12\b ->} {\cf18 Char}\par
+{\cf19 swissFlag} (x , y, size)\par
+    {\cf4 |} x `zwischen` (einF{\u252}nftel, size {\cf4 -} einF{\u252}nftel) {\cf4 &&} y `zwischen` (zweiF{\u252}nftel, size {\cf4 -} zweiF{\u252}nftel) {\cf12\b =} {\cf2 ' '}\par
+    {\cf4 |} y `zwischen` (einF{\u252}nftel, size {\cf4 -} einF{\u252}nftel) {\cf4 &&} x `zwischen` (zweiF{\u252}nftel, size {\cf4 -} zweiF{\u252}nftel) {\cf12\b =} {\cf2 ' '}\par
+    {\cf4 |} otherwise {\cf12\b =} {\cf2 '.'}\par
+    {\cf8\b where}\par
+        einF{\u252}nftel  {\cf12\b =} size `div` {\cf4 5}\par
+        zweiF{\u252}nftel {\cf12\b =} {\cf4 2} {\cf4 *} einF{\u252}nftel\par
+\par
+{\cf19 circle} {\cf12\b ::} ({\cf18 Int}, {\cf18 Int}, {\cf18 Int}) {\cf12\b ->} {\cf18 Char}\par
+{\cf19 circle}(x , y, size)\par
+    {\cf4 |} inCircle  {\cf12\b =} {\cf8\b if} x {\cf4 <} mitte {\cf8\b then} {\cf2 ' '} {\cf8\b else} {\cf2 '-'}\par
+    {\cf4 |} otherwise {\cf12\b =} {\cf8\b if} y {\cf4 >} mitte {\cf8\b then} {\cf2 ':'} {\cf8\b else} {\cf2 '.'}\par
+    {\cf8\b where}\par
+        inCircle {\cf12\b =} entfernung (mitte, mitte) (x, y) {\cf4 <=} {\cf4 2} {\cf4 *} size `div` {\cf4 5}\par
+        mitte {\cf12\b =} size `div` {\cf4 2}\par
+\par
+{\cf19 gitter} {\cf12\b ::} ({\cf18 Int}, {\cf18 Int}, {\cf18 Int}) {\cf12\b ->} {\cf18 Char}\par
+{\cf19 gitter}(x, y, size)\par
+    {\cf4 |} y `mod` {\cf4 5} {\cf4 ==} {\cf4 0} {\cf12\b =} {\cf2 '|'}\par
+    {\cf4 |} x `mod` {\cf4 5} {\cf4 ==} {\cf4 0} {\cf12\b =} {\cf2 '-'}\par
+    {\cf4 |} otherwise      {\cf12\b =} {\cf2 ' '}\par
+\par
+{\cf5\i -- Eigenes Bild}\par
+{\cf5\i -- Schachbrett, dass innerhalb eines Kreises in der Mitte von den Zeichen invertiert ist}\par
+{\cf19 chessCircle} {\cf12\b ::} ({\cf18 Int}, {\cf18 Int}, {\cf18 Int}) {\cf12\b ->} {\cf18 Char}\par
+{\cf19 chessCircle} (x, y, size )\par
+    {\cf5\i -- /= wird als explizites oder verwendet}\par
+    {\cf5\i -- (x `div` tileSize + y `div` tileSize) `mod` 2 == 0) gibt zur{\u252}ck ob das Schachfeld Schwarz ist}\par
+    {\cf4 |} ((x `div` tileSize {\cf4 +} y `div` tileSize) `mod` {\cf4 2} {\cf4 ==} {\cf4 0}) {\cf4 /=} inCircle {\cf12\b =} {\cf2 '#'}\par
+    {\cf4 |} otherwise {\cf12\b =} {\cf2 ' '}\par
+    {\cf8\b where} \par
+        tileSize {\cf12\b =} size `div`{\cf4 8}\par
+        inCircle {\cf12\b =} entfernung (mitte, mitte) (x, y) {\cf4 <=} {\cf4 2} {\cf4 *} size `div` {\cf4 5}\par
+        mitte {\cf12\b =} size `div` {\cf4 2}\par
+\par
+{\cf5\i -- Zum Testen}\par
+{\cf19 testSwissFlag}  {\cf12\b =} putStrLn (paintPicture swissFlag {\cf4 60})\par
+{\cf19 testCircle}     {\cf12\b =} putStrLn (paintPicture circle {\cf4 60})\par
+{\cf19 testGitter}     {\cf12\b =} putStrLn (paintPicture gitter {\cf4 60})\par
+{\cf19 testChess}      {\cf12\b =} putStrLn (paintPicture chessCircle {\cf4 60})\par
+}
