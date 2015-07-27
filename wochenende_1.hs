@@ -83,7 +83,7 @@ maxNeighborsDistance [_] = 0
 maxNeighborsDistance (a:b:xs)
     | abs (a - b) >  maxRest = abs (a - b)
     | otherwise              = maxRest
-    where maxRest = maxNeighborsDistance xs
+    where maxRest = b : maxNeighborsDistance xs
 
 
 
