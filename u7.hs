@@ -18,6 +18,7 @@ selectSort operator liste = [getFirst liste]
 		delFirst _ _ = undefined
 		-}
 --2. Ansatz
+{-
 
 selectSort::(Ord a)=>(a->Bool)->[a]->[a]
 selectSort f xs = helpSort xs [] f
@@ -54,6 +55,7 @@ prefix (x:xs)(y:ys)
 
 --a)iii
 
+
 longestPrefix xs =sel(helper xs) 
 	where
 		helper xs | length xs < 2 = (0,[])
@@ -67,10 +69,32 @@ sel ((l1,s1):(l2,s2):xs)
 
 longestRepSeq:: Eq a =>[a]->[a]
 longestRepSeq xs = snd(longestPrefix(sort(<=)(tails xs)))
-{- 3. 
+
+ 3. 
 Tails hat eine Komplexität von T(n)= O(n)
 sort hat eine Komplexität von T(n)=O(n log n)*T<= =O(n²log n)
 Prefix hat eine Komplexität von T(n)= O(n)
 LongestPrefix hat eine Komplexität von T(n)=O(n²)
 snd hat eine Komplexität von O(1)
-}
+-}
+--4.--
+flattenL::Num a =>[[a]] ->[a]
+flattenL = foldl (++) []
+
+
+flattenR::Num a =>[[a]] ->[a]
+flattenR = foldr (++) []
+
+{- Die Methode flattenR ist schneller als die methode FlattenL 
+in der Ausführung jedoch sollte vom Speicherplatz, die foldL methode 
+sinnvoller sein da dadurch nicht ewige rekursive Verkettungen 
+entstehen sondern ein Zwischenergebnis sofort ausgerechnet wird-}
+
+--mymin:: Num a => [a] -> a
+mymin (x:y:xs) a = foldr (if x<y then x else y)
+
+
+--7.-
+bin2dec::[Int]-> Int
+bin2dec = foldl help 0
+	where help y x = y*2+x
