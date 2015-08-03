@@ -1,0 +1,118 @@
+{\rtf1\ansi\uc0\deff0{\fonttbl{\f0\fmodern\fprq1\fcharset0 Hasklig;}}{\colortbl;\red153\green153\blue153;\red186\green33\blue33;\red160\green0\blue0;\red187\green102\blue136;\red210\green65\blue58;\red0\green128\blue0;\red176\green0\blue64;\red0\green68\blue221;\red102\green102\blue102;\red188\green122\blue0;\red64\green128\blue128;\red170\green34\blue255;\red25\green23\blue124;\red136\green0\blue0;\red0\green160\blue0;\red0\green0\blue128;\red160\green160\blue0;\red0\green0\blue255;\red187\green102\blue34;\red125\green144\blue41;\red255\green0\blue0;\red136\green136\blue136;\red128\green0\blue128;\red187\green187\blue187;}\f0 {\cf11\i -- ProInformatik II: Funktionale Programmierung}\par
+{\cf11\i -- 2. {\u220}bungsblatt f{\u252}r Wochenende}\par
+{\cf11\i -- David Knaack und Evan Seilz}\par
+\par
+\par
+{\cf11\i -- Aufgabe 1}\par
+{\cf11\i -- a)}\par
+{\cf18 potenzNoRep} {\cf12\b ::} {\cf7 Int} {\cf12\b ->} {\cf7 Int} {\cf12\b ->} [{\cf7 Int}]\par
+{\cf18 potenzNoRep} n m {\cf12\b =} mergeSort [potenzList b m {\cf9 |} b {\cf12\b <-} [{\cf9 2} {\cf9 ..} n]]\par
+  {\cf6\b where}\par
+    {\cf11\i -- gibt Liste mit allen Potenzen zu Basis b zur{\u252}ck}\par
+    {\cf11\i -- jede potenzList ist von klein nach gro{\u223} sortiert}\par
+    potenzList b m {\cf12\b =} [b {\cf9 ^} e {\cf9 |} e {\cf12\b <-} [{\cf9 2} {\cf9 ..} m]]\par
+\par
+    {\cf11\i -- mergeSort bis es nur noch eine List gibt}\par
+    mergeSort [xs] {\cf12\b =} xs\par
+    mergeSort xs {\cf12\b =} mergeSort (mergeHelp xs)\par
+    mergeHelp (x1{\cf7 :}x2{\cf7 :}xs) {\cf12\b =} merge x1 x2 {\cf7 :} mergeHelp xs\par
+    mergeHelp xs {\cf12\b =} xs\par
+\par
+    {\cf11\i -- merge ist ver{\u228}ndert zum Entfernen von Duplikate}\par
+    merge xs {\cf7 []} {\cf12\b =} xs\par
+    merge {\cf7 []} ys {\cf12\b =} ys\par
+    merge (x{\cf7 :}xs) (y{\cf7 :}ys) {\cf12\b =} {\cf6\b case} x `compare` y {\cf6\b of}\par
+      {\cf7 EQ} {\cf12\b ->} x {\cf7 :} merge xs ys\par
+      {\cf7 LT} {\cf12\b ->} x {\cf7 :} merge xs (y{\cf7 :}ys)\par
+      {\cf7 GT} {\cf12\b ->} y {\cf7 :} merge (x{\cf7 :}xs) ys\par
+\par
+{\cf11\i -- b)}\par
+{\cf11\i -- b^e muss O(n*m) (f{\u252}r jedes n und m) ausgef{\u252}hrt werden}\par
+{\cf11\i -- die resultierenden Listen haben insgesmat O(n*m) Elemente}\par
+{\cf11\i -- Merge Sort (aus dem Unterricht) hat eine Zeitkomplexit{\u228}t von O(n*log(n)) abhing von der Listenl{\u228}nge n}\par
+{\cf11\i -- die {\u196}nderungen f{\u252}r das Entfernen doppelter Element {\u228}ndern das nicht, also ist hat mergeSort eine Komplexit{\u228}t von O(n*m*log(n*m))}\par
+{\cf11\i -- insgesamt ist die Laufzeit O(n*m + n*m*log(n*m)) also O(n*m*log(n*m))}\par
+\par
+\par
+{\cf11\i -- Aufgabe 2}\par
+{\cf11\i -- a)}\par
+{\cf18 quicksort} {\cf12\b ::} ({\cf7 Ord} a) {\cf12\b =>} [a] {\cf12\b ->} [a]\par
+{\cf18 quicksort} {\cf7 []} {\cf12\b =} {\cf7 []}\par
+{\cf18 quicksort} (x{\cf7 :}xs) {\cf12\b =}\par
+    quicksort [n {\cf9 |} n {\cf12\b <-} xs, n {\cf9 <=} x]  {\cf9 ++} [x] {\cf9 ++} quicksort [ n{\cf9 |} n {\cf12\b <-} xs, n {\cf9 >} x]\par
+\par
+{\cf18 minNatNotIn} {\cf12\b ::} [{\cf7 Int}] {\cf12\b ->} {\cf7 Int}\par
+{\cf18 minNatNotIn} l {\cf12\b =} helper (quicksort l) [{\cf9 0}{\cf9 ..}]\par
+    {\cf6\b where}\par
+        helper {\cf12\b ::} [{\cf7 Int}] {\cf12\b ->} [{\cf7 Int}] {\cf12\b ->} {\cf7 Int}\par
+        helper {\cf7 []} y {\cf12\b =} head y\par
+        helper (x{\cf7 :}xs) (y{\cf7 :}ys) {\cf12\b =} {\cf6\b case} compare x y {\cf6\b of}\par
+            {\cf11\i -- Die nat{\u252}rliche Zahl ist vorhanden}\par
+            {\cf7 EQ} {\cf12\b ->} helper xs ys\par
+            {\cf11\i -- Es handelt sich nicht um eine nat{\u252}rliche Zahl}\par
+            {\cf7 LT} {\cf12\b ->} helper xs (y{\cf7 :}ys)\par
+            {\cf11\i -- Die nat{\u252}rliche Zahl ist die erste, die fehlt}\par
+            {\cf7 GT} {\cf12\b ->} y\par
+{\cf11\i -- b)}\par
+{\cf11\i -- minNatNotIn wird 1 mal aufgerufen O(1)}\par
+{\cf11\i -- wenn n die L{\u228}nge der Eingabeliste ist, wird quicksort wird bis zu O(n) mal rekursiv aufgerufen, wenn sich die Liste immer nur um ein Element verkleinert, wobei O(n) Vergleichen pro Aufruf durchgef{\u252}hrt werden - ingesamt also O(n^2)}\par
+{\cf11\i -- helper wird mit Vergleichen f{\u252}r bis zu jedes Element der Liste ausgef{\u252}hrt, hat also eine Komplexit{\u228}t von O (n)}\par
+{\cf11\i -- insgesmat hat minNatNotIn hier eine Zeitkomplexit{\u228}t von O(1 + n + n^2) = O(n^2) und mit einem anderm Algorithmus zum Sortieren mit Vergleichen bis zu O(n*log(n))}\par
+\par
+{\cf11\i -- Aufgabe 3}\par
+{\cf11\i -- Listen werden hier als Stapel verwendet}\par
+{\cf6\b data} {\cf7 Queue} a {\cf12\b =} {\cf7 Q} [a] [a] {\cf6\b deriving} {\cf7 Show}\par
+\par
+{\cf18 makeQueue} {\cf12\b ::} {\cf7 Queue} a\par
+{\cf18 makeQueue} {\cf12\b =} {\cf7 Q} {\cf7 []} {\cf7 []}\par
+\par
+{\cf18 isEmpty} {\cf12\b ::} {\cf7 Queue} a {\cf12\b ->} {\cf7 Bool}\par
+{\cf18 isEmpty} ({\cf7 Q} {\cf7 []} {\cf7 []}) {\cf12\b =} {\cf7 True}\par
+{\cf18 isEmpty} {\cf6\b _}         {\cf12\b =} {\cf7 False}\par
+\par
+{\cf18 enqueue} {\cf12\b ::} {\cf7 Queue} a {\cf12\b ->} a {\cf12\b ->} {\cf7 Queue} a\par
+{\cf18 enqueue} ({\cf7 Q} a b) x {\cf12\b =} {\cf7 Q} a (x{\cf7 :}b)\par
+\par
+{\cf11\i -- Gibt Tupel mit neuer Queue und Element zur{\u252}ck}\par
+{\cf18 dequeue} {\cf12\b ::} {\cf7 Queue} a {\cf12\b ->} ({\cf7 Queue} a, a)\par
+{\cf18 dequeue} ({\cf7 Q} {\cf7 []} {\cf7 []}) {\cf12\b =} {\cf5\b error} {\cf2 "}{\cf2 Empty Queue}{\cf2 "}\par
+{\cf18 dequeue} ({\cf7 Q} {\cf7 []} ys) {\cf12\b =} dequeue {\cf9 $} {\cf7 Q} (reverse ys) {\cf7 []}\par
+{\cf18 dequeue} ({\cf7 Q} (x{\cf7 :}xs) ys) {\cf12\b =} ({\cf7 Q} xs ys, x)\par
+\par
+{\cf11\i -- Aufgabe 4}\par
+{\cf11\i --     1) inkorrekt}\par
+{\cf11\i --     2) inkorrekt}\par
+{\cf11\i --     3) korrekt - y, z und w sind frei, Rest nicht frei}\par
+{\cf11\i --     4) inkorrekt}\par
+{\cf11\i --     5) korrekt - x, b und c sind frei, Rest nicht frei}\par
+{\cf11\i --     6) korrekt - w und b sind frei}\par
+\par
+{\cf11\i -- Aufgabe 5}\par
+{\cf11\i -- 1.}\par
+{\cf11\i --     ({\u955}x.xx) ({\u955}abc.cbabc) ({\u955}x.fxx)(fx)y}\par
+{\cf11\i --     ({\u955}abc.cbabc) ({\u955}abc.cbabc) ({\u955}x.fxx)(fx)y}\par
+{\cf11\i --     ({\u955}x.fxx) (fx) ({\u955}abc.cbabc) (fx) ({\u955}x.fxx)y}\par
+{\cf11\i --     f(fx)(fx) y ({\u955}x.fxx) (fx) ({\u955}x.fxx) y}\par
+{\cf11\i --     f(fx)(fx) y f(fx)(fx) ({\u955}x.fxx) y}\par
+{\cf11\i --     ffxfxyffxfxfyy}\par
+\par
+{\cf11\i -- 2.}\par
+{\cf11\i --     ({\u955}x.x)(({\u955}abc.b(abc))({\u955}fx.f(fx))))}\par
+{\cf11\i --     ({\u955}t.t)(({\u955}abc.b(abc))({\u955}fx.f(fx)))}\par
+{\cf11\i --     ({\u955}abc.b(abc))({\u955}fx.f(fx))}\par
+{\cf11\i --     ({\u955}bc.b(({\u955}fx.f(fx))bc))}\par
+{\cf11\i --     ({\u955}bc.b(({\u955}fx.f(fx))bc))}\par
+{\cf11\i --     ({\u955}bc.bb(bc))}\par
+{\cf11\i --     ({\u955}bc.bbbc)}\par
+\par
+{\cf11\i -- Aufgabe 6}\par
+{\cf11\i --     {\u955}wyx. y (w y x)  {\u8801}S}\par
+{\cf11\i --     (S (S {\u955}sx.s(x)))}\par
+{\cf11\i --     (S (S {\u955}sq.s(q)))}\par
+{\cf11\i --     (S ({\u955}wyx. y (w y x) {\u955}sq.s(1)))}\par
+{\cf11\i --     (S ({\u955}yx. y ({\u955}sq.s(q) y x) ))}\par
+{\cf11\i --     (S ({\u955}yx. yyx))}\par
+{\cf11\i --     (S ({\u955}yx. ppq))}\par
+{\cf11\i --     ({\u955}wyx. y (w y x)({\u955}yx. ppq))}\par
+{\cf11\i --     ({\u955}yx. yyyx)}\par
+}
