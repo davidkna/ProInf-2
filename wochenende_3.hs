@@ -64,6 +64,6 @@ reverse x   = head x : (reverse x (tail x))
     where
         aux NIL y   = y
         aux L   y   = y
-        aux x   Nil = x
+        aux x   NIL = x
         aux y   L   = y
         aux x   y   = aux (tail x) (head x : y)
